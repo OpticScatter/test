@@ -6,6 +6,7 @@
 <body>
 	<canvas id="canvas" width="800" height="400" style="background-color: black; width: 100%; height: 100%;"></canvas>
 	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/ball.js"></script>
 	<script type="text/javascript">
 
 		//General Variables
@@ -18,23 +19,6 @@
 		let p1MovingUp = false;
 		let p2MovingDown = false;
 		let p2MovingUp = false;
-		
-		//Set random start angle for ball
-		function seedBall(){
-			let ballStartSeed = Math.random()*100;
-			if(ballStartSeed < 25){			
-				ballDirection = 0.78
-			} 
-			else if(ballStartSeed < 50){	
-				ballDirection = 2.35
-			} 
-			else if(ballStartSeed < 75){	
-				ballDirection = 3.92
-			} 
-			else{						
-				ballDirection = 5.49
-			}
-		}		
 
 		//Init
 		app.onInit = function(){
@@ -72,8 +56,7 @@
 				color  : 'white',
 			});
 		
-			//Seed needs to be called here
-			seedBall();
+			ballDirection = ball.seedBall();
 
 			//Keydown Handler
 			document.addEventListener('keydown', keyDownHandler);
@@ -146,17 +129,8 @@
 			//Reset ball and update score when ball reaches sides
 			if(this.getNode('ball').x < -20 || this.getNode('ball').x > 800)
 			{
-				if(this.getNode('ball').x > 800){ 
-					this.p1Score ++;
-				}
-				if(this.getNode('ball').x < -20){ 
-					this.p2Score ++;
-				}
-				console.log("score: Player 1 - " + this.p1Score + "     Player 2 - " + this.p2Score); 	
-				this.getNode('ball').x = 400;
-				this.getNode('ball').y = 200;
-				this.getNode('ball').speed = 3;
-				seedBall();
+				ball.resetBall();
+				ballDirection = ball.seedBall();
 			}
 			//Invert direction when ball hits top and bottom
 			if(this.getNode('ball').y < 0 || this.getNode('ball').y > 380)
