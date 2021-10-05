@@ -4,6 +4,7 @@ var app = {
 	context : null,
 	p1Score : 0,
 	p2Score : 0,
+	ballCount : 1,
 
 	//resizing
 	width   : 800,
@@ -24,6 +25,14 @@ var app = {
 		this.render();
 		this.onInit();
 	},
+	drawScore : function(){
+		this.context.font = "30px Courier";
+		this.context.fillStyle = "white";
+		this.context.textAlign = "right";
+		this.context.fillText(this.p1Score, 370, 380);
+		this.context.textAlign = "left";
+		this.context.fillText(this.p2Score, 420, 380);
+	},
 	render : function(){
 		this.clear();
 		this.update();
@@ -38,11 +47,12 @@ var app = {
 	    var dt = Date.now() - this.lastUpdate;
 
 		this.onUpdate(dt);
+		this.drawScore(); //Draw score text to screen
 
 		for(var index in this.nodes){
 			var node = this.nodes[index];
 			//Draw a circle if id = 'ball'
-			if(node.id == 'ball'){ 
+			if(node.id == 'ball1' || node.id == 'ball2'){ 
 				this.context.beginPath();
 				this.context.arc(node.x, node.y, node.width, 0, Math.PI*2);
 				this.context.fill();
@@ -52,19 +62,7 @@ var app = {
 				this.context.fillStyle = node.color;
 				this.context.fillRect(node.x, node.y, node.width, node.height);
 			}
-			
 		}
-		
-
-		//Draw score text to screen
-		canvas  = document.getElementById('canvas');
-		context = canvas.getContext('2d');
-		context.font = "30px Courier";
-		context.fillStyle = "white";
-		context.textAlign = "right";
-		context.fillText(this.p1Score, 370, 380);
-		context.textAlign = "left";
-		context.fillText(this.p2Score, 420, 380);
 
 		this.lastUpdate = Date.now();
 		this.timestamp+=dt;
@@ -83,8 +81,7 @@ var app = {
 
 	//events
 	onInit   : function(){},
-	onUpdate : function(){},
-	drawText : function(){}
+	onUpdate : function(){}
 };
 
 window.onload = function(){
