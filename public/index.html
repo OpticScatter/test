@@ -12,7 +12,6 @@
 		//General Variables
 		let paddleSpeed = 3;
 		let gamePaused = false;
-		let ballDirection = 0;
 
 		//Player Variables
 		let p1MovingDown = false;
@@ -39,13 +38,14 @@
 				color  : 'white'
 			});
 			this.nodes.push({
-				id : 'ball',
+				id : 'ball1',
 				x  : 400,
 				y  : 200,
 				width  : 10,
 				height : 20,
 				color  : 'white',
-				speed : 3
+				speed : 3,
+				direction : 0
 			});
 			this.nodes.push({
 				id : 'line',
@@ -56,7 +56,8 @@
 				color  : 'white',
 			});
 		
-			ballDirection = ball.seedBall();
+			//Seed first ball starting angle
+			this.getNode('ball1').direction = ball.seedBall();
 
 			//Keydown Handler
 			document.addEventListener('keydown', keyDownHandler);
@@ -121,40 +122,17 @@
 				if(p2MovingUp && this.getNode('player2').y > 0){		
 					this.getNode('player2').y -= paddleSpeed;
 				}
-				//Add speed value to direction that ball is travelling
-				this.getNode('ball').x += Math.cos(ballDirection) * this.getNode('ball').speed;
-				this.getNode('ball').y += Math.sin(ballDirection) * this.getNode('ball').speed;
+				
+				//Ball collision and movement
+				ball.locationCheck('ball1');
+				ball.moveBall('ball1');
+
+				if(this.ballCount > 1){
+					ball.locationCheck('ball2');
+					ball.moveBall('ball2');
+				}
 			}
 			
-			//Reset ball and update score when ball reaches sides
-			if(this.getNode('ball').x < -20 || this.getNode('ball').x > 800)
-			{
-				ball.resetBall();
-				ballDirection = ball.seedBall();
-			}
-			//Invert direction when ball hits top and bottom
-			if(this.getNode('ball').y < 0 || this.getNode('ball').y > 380)
-			{
-				ballDirection *= -1;
-			}	
-
-			//Bounce off Paddles
-			//Player 1
-			if(	this.getNode('ball').x > 35 &&
-				this.getNode('ball').x < 55 && 	
-				(this.getNode('ball').y - (this.getNode('player1').y+50)) < 50 &&
-				(this.getNode('ball').y - (this.getNode('player1').y+50)) > -50){
-					ballDirection -= 1.57;
-					this.getNode('ball').speed += 0.1; //Speed up ball every hit
-			}
-			//Player 2
-			if(	this.getNode('ball').x > 750 && 	
-				this.getNode('ball').x < 770 && 	
-				(this.getNode('ball').y - (this.getNode('player2').y+50)) < 50 &&
-				(this.getNode('ball').y - (this.getNode('player2').y+50)) > -50){
-					ballDirection -= 1.57;
-					this.getNode('ball').speed += 0.1; //Speed up ball every hit
-			}
 		};
 	</script>
 </body>

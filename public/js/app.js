@@ -4,6 +4,7 @@ var app = {
 	context : null,
 	p1Score : 0,
 	p2Score : 0,
+	ballCount : 1,
 
 	//resizing
 	width   : 800,
@@ -51,7 +52,7 @@ var app = {
 		for(var index in this.nodes){
 			var node = this.nodes[index];
 			//Draw a circle if id = 'ball'
-			if(node.id == 'ball'){ 
+			if(node.id == 'ball1' || node.id == 'ball2'){ 
 				this.context.beginPath();
 				this.context.arc(node.x, node.y, node.width, 0, Math.PI*2);
 				this.context.fill();
